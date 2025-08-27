@@ -22,6 +22,16 @@ class Asset(ABC):
         """Return description of the asset"""
         pass
 
+class AssetFactory:
+    @staticmethod
+    def create_asset(asset_type, **kwargs):
+        if asset_type=="stock":
+            return Stock(**kwargs)
+        elif asset_type=="bond":
+            return Bond(**kwargs)
+        else:
+            raise ValueError("Invalid Asset Type")
+
 class Stock(Asset):
     """Sub Class that inherits Asset"""
     def __init__(self, ticker, price, company):
@@ -43,11 +53,10 @@ class Bond(Asset):
         res = f"Price:{self.price}\nInterest Rate:{self.interest_rate}\nMaturity Date:{self.maturity_date}\n"
         return res
     
-apple = Stock(ticker="AAPL", price=150.00, company="Apple")
-google = Stock(ticker="GOOGL", price=2800.00,company="Google")
-hinduja_limited = Bond(price=1000.00,interest_rate=15,maturity_date="1 January 2026")
+google = AssetFactory.create_asset(asset_type="stock",ticker="GOOGL", price=2800.00,company="Google")
+hinduja_limited = AssetFactory.create_asset(asset_type="bond",price=1000.00,interest_rate=15,maturity_date="1 January 2026")
 
-portfolio = [apple, hinduja_limited]
+portfolio = [google, hinduja_limited]
 
 for item in portfolio:
    if type(item) is Bond:
